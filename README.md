@@ -1,17 +1,17 @@
 # Retail Database Agent - n8n Workflow
 
 **Author:** Ishmeen Garewal  
-**Course:** Advanced Deep Learning, Columbia University  
+**Course:** Forecasting, Columbia University  
 **Assignment:** Agentic AI Workflow (60 pts)
 
 ## Overview
-AI agent that queries a retail database using natural language via n8n workflow automation.
+Agentic AI workflow in n8n using online retail data which responds to questions in the chat with SQL queries and runs those queries and returns responses for it. 
+
 
 ## Dataset
 - **Source:** UCI Online Retail Dataset
 - **Rows:** 397,924 transactions
 - **Customers:** 4,339
-- **Period:** Dec 2010 - Dec 2011
 
 ## Tech Stack
 - n8n (workflow automation)
