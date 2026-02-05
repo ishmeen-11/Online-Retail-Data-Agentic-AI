@@ -37,6 +37,6 @@ docker run -it --rm \
 - Host: `host.docker.internal`
 - Database: `online_retail1`
 - User: `surendarsinghgarewal`
-- Password: (blank)
+- Password: *********
 - Port: `5432`
 - SSL: `disable`
