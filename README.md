@@ -2,7 +2,7 @@
 
 **Author:** Ishmeen Garewal  
 **Course:** Forecasting, Columbia University  
-**Assignment:** Agentic AI Workflow (60 pts)
+**Assignment:** Agentic AI Workflow
 
 ## Overview
 Agentic AI workflow in n8n using online retail data which responds to questions in the chat with SQL queries and runs those queries and returns responses for it. 
