@@ -1,0 +1,140 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "This workflow uses a Postgres DB, but you could swap it for a MySQL or SQLite one",
+        "height": 441,
+        "width": 677,
+        "color": 7
+      },
+      "id": "0caf06e3-e15c-4386-a7a9-f2a7b2191d2f",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -288,
+        -192
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "65d37bc6-5486-4505-a3fc-b3f93d7a87b3",
+      "name": "When chat message received",
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "position": [
+        -224,
+        -112
+      ],
+      "webhookId": "1c0d08f0-abd0-4bdc-beef-370c27aae1a0",
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "{{ $fromAI('sql_statement') }}",
+        "options": {}
+      },
+      "id": "a0b2fb3f-098c-4fd6-81f6-7800e6da4c4a",
+      "name": "Postgres",
+      "type": "n8n-nodes-base.postgresTool",
+      "position": [
+        240,
+        96
+      ],
+      "typeVersion": 2.5,
+      "credentials": {
+        "postgres": {
+          "id": "wknAYLJQ5ZyMqy3i",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "You are a helpful assistant that can query an online retail database.\n\nDatabase Schema:\nTable: transactions\nColumns:\n- InvoiceNo (TEXT): Invoice number\n- StockCode (TEXT): Product code\n- Description (TEXT): Product name\n- Quantity (INTEGER): Quantity purchased\n- InvoiceDate (TIMESTAMP): Purchase date\n- UnitPrice (REAL): Price per unit\n- CustomerID (INTEGER): Unique customer identifier\n- Country (TEXT): Customer country\n\nWhen users ask questions, generate SQL queries to answer them.\nAlways explain your findings clearly."
+        }
+      },
+      "id": "9f2d48d8-eda5-40f8-a6d1-0dcd629b2f2e",
+      "name": "AI Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "position": [
+        0,
+        -112
+      ],
+      "typeVersion": 1.8
+    },
+    {
+      "parameters": {
+        "model": "openai/gpt-oss-safeguard-20b",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        -64,
+        96
+      ],
+      "id": "839edf97-46b3-4d0e-9857-350bdde2ec8d",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "Zj5eEIlKZajgWka7",
+          "name": "Groq account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Postgres": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "e6567540-01c0-4d75-9c33-72eba5d31f1b",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "f0efe91be8019498214134fa99994ff0d2942a0b51ad650f95eab6386b52459e"
+  },
+  "id": "n_tRSLXYM9ywx30q1KL7I",
+  "tags": []
+}
