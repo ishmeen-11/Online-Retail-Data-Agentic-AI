@@ -7,6 +7,8 @@
 ## Overview
 Agentic AI workflow in n8n using online retail data which responds to questions in the chat with SQL queries and runs those queries and returns responses for it. 
 
+## Demo
+Click here to see demo [https://drive.google.com/file/d/1PlZL91mGSBMtVO2exxRl47YBz_V1vbrs/view?usp=sharing]
 
 ## Dataset
 - **Source:** UCI Online Retail Dataset
