@@ -1,0 +1,140 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "This workflow uses a Postgres DB, but you could swap it for a MySQL or SQLite one",
+        "height": 601,
+        "width": 677,
+        "color": 7
+      },
+      "id": "bc7996da-cbd5-4589-a492-cce20064beca",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -320,
+        -80
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "e8606e86-fc36-4907-8d11-eb1cc026857e",
+      "name": "When chat message received",
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "position": [
+        -256,
+        32
+      ],
+      "webhookId": "1c0d08f0-abd0-4bdc-beef-370c27aae1a0",
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "{{ $fromAI('sql_statement') }}",
+        "options": {}
+      },
+      "id": "b7874066-3c4e-4f23-a576-246bd3b4d94f",
+      "name": "Postgres",
+      "type": "n8n-nodes-base.postgresTool",
+      "position": [
+        208,
+        240
+      ],
+      "typeVersion": 2.5,
+      "credentials": {
+        "postgres": {
+          "id": "bxMvkApMgd9RWH60",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "You are a helpful assistant that can query an online retail database.\n\nDatabase Schema:\nTable: transactions\nColumns (CASE-SENSITIVE - use double quotes):\n- \"InvoiceNo\" (text): Invoice number\n- \"StockCode\" (text): Product code  \n- \"Description\" (text): Product name\n- \"Quantity\" (bigint): Quantity purchased\n- \"InvoiceDate\" (timestamp): Purchase date and time\n- \"UnitPrice\" (double precision): Price per unit (£)\n- \"CustomerID\" (bigint): Unique customer identifier (can be NULL)\n- \"Country\" (text): Customer's country\n\nCRITICAL SQL RULES:\n1. ALWAYS use double quotes around column names: \"Country\" not country\n2. Column names are case-sensitive - use EXACT capitalization as shown above\n3. Example: SELECT \"Country\", COUNT(*) FROM transactions GROUP BY \"Country\"\n\nDataset Notes:\n- Contains ~1 million transactions from 2009-2011\n- Includes NULLs, cancellations (InvoiceNo starting with 'C'), and negative quantities\n- Use WHERE \"CustomerID\" IS NOT NULL to filter out missing customers\n- Use WHERE \"Quantity\" > 0 for valid sales only\n\nWhen users ask questions:\n- Generate valid PostgreSQL queries\n- Always use double quotes around column names\n- Handle NULLs appropriately\n- Explain your results clearly"
+        }
+      },
+      "id": "a9e51bea-9325-4d84-92ea-268dfea02839",
+      "name": "AI Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "position": [
+        -32,
+        32
+      ],
+      "typeVersion": 1.8
+    },
+    {
+      "parameters": {
+        "model": "openai/gpt-oss-safeguard-20b",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        -96,
+        240
+      ],
+      "id": "5bb8ede3-d009-4eeb-b2b8-0085601186a4",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "CZcecLvzIoVmnrIe",
+          "name": "Groq account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Postgres": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "e076b031-efd2-4d2f-9d92-4b7b49d7a887",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "54f645d12916412e95f469f49dd498220d2320a9a1234f8c86f7d1609910c577"
+  },
+  "id": "dicLt__mr8lwivLm5iCwB",
+  "tags": []
+}
